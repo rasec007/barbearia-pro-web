@@ -6,7 +6,11 @@ import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-    // ... (omitted)
+    selector: 'app-login',
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent {
     authService = inject(AuthService);

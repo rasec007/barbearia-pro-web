@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClientService, Client } from '../../services/client.service';
 import { ToastService } from '../../services/toast.service';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
     selector: 'app-clients',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, RouterLinkActive],
+    imports: [CommonModule, FormsModule],
     templateUrl: './clients.component.html',
     styleUrl: './clients.component.css'
 })
