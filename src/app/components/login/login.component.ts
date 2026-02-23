@@ -32,8 +32,18 @@ export class LoginComponent {
                 this.router.navigate(['/dashboard']);
             },
             error: (err) => {
-                this.error = 'E-mail ou senha incorretos.';
+                console.error('Erro no login:', err);
                 this.loading = false;
+
+                if (err.status === 401) {
+                    this.error = 'E-mail ou senha incorretos.';
+                } else if (err.status === 0) {
+                    this.error = 'Não foi possível conectar ao servidor. Verifique a conexão.';
+                    this.toastService.error('Erro de conexão com a API.');
+                } else {
+                    this.error = 'Ocorreu um erro inesperado no servidor.';
+                    this.toastService.error(`Erro ${err.status}: Verifique os logs do servidor.`);
+                }
             }
         });
     }
