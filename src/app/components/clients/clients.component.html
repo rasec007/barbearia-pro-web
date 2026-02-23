@@ -1,0 +1,101 @@
+<div class="clients-page">
+    <header class="page-header">
+        <div class="title-group">
+            <h1>Clientes</h1>
+            <p>Gerencie sua base de clientes e histórico</p>
+        </div>
+        <button class="btn btn-primary" (click)="openModal()">+ Adicionar Cliente</button>
+    </header>
+
+    <div class="filters card">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" [(ngModel)]="searchTerm" (input)="applyFilter()"
+                placeholder="Pesquisar por nome ou telefone...">
+        </div>
+    </div>
+
+    <div class="clients-grid">
+        <div *ngFor="let client of filteredClients" class="client-card card">
+            <div class="client-info">
+                <div class="client-avatar">
+                    <img *ngIf="client.photoUrl; else initial" [src]="client.photoUrl" [alt]="client.name">
+                    <ng-template #initial>{{ client.name.charAt(0) }}</ng-template>
+                </div>
+                <div class="client-details">
+                    <h3>{{ client.name }}</h3>
+                    <p class="service-tag">{{ client.serviceType || 'Cliente Regular' }}</p>
+                </div>
+            </div>
+
+            <div class="contact-actions">
+                <a [href]="getWhatsAppLink(client.phone)" target="_blank" class="contact-btn whatsapp">
+                    💬 {{ client.phone }}
+                </a>
+            </div>
+
+            <div class="client-footer">
+                <button class="btn-icon" (click)="openModal(client)">✏️</button>
+                <button class="btn-icon delete" (click)="deleteClient(client.id!)">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal">
+        <div class="modal card">
+            <div class="modal-header">
+                <h2>{{ eClient.id ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+                <button (click)="closeModal()" class="close-btn">&times;</button>
+            </div>
+            <form (ngSubmit)="saveClient()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" name="name" [(ngModel)]="eClient.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular (WhatsApp) *</label>
+                        <input type="text" name="phone" [(ngModel)]="eClient.phone" required
+                            placeholder="(11) 99999-9999">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" name="email" [(ngModel)]="eClient.email">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Serviço</label>
+                        <select name="service" [(ngModel)]="eClient.serviceType">
+                            <option value="">Selecione...</option>
+                            <option value="Corte">Corte</option>
+                            <option value="Barba">Barba</option>
+                            <option value="Combo">Combo</option>
+                            <option value="Química">Química</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" name="address" [(ngModel)]="eClient.address">
+                </div>
+
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea name="notes" [(ngModel)]="eClient.notes" rows="3"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" (click)="closeModal()"
+                        [disabled]="isSaving">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+                        {{ isSaving ? 'Salvando...' : 'Salvar Cliente' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

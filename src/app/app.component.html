@@ -1,0 +1,41 @@
+<div class="app-container" [class.logged-in]="authService.isLoggedIn()">
+    <!-- Sidebar (Only for logged users) -->
+    <aside class="sidebar" *ngIf="authService.isLoggedIn()">
+        <div class="sidebar-header">
+            <div class="logo">✂️</div>
+            <span class="logo-text">AgendaPro</span>
+        </div>
+
+        <nav class="nav-menu">
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+                <span class="icon">🏠</span>
+                <span>Dashboard</span>
+            </a>
+            <a routerLink="/clients" routerLinkActive="active" class="nav-item">
+                <span class="icon">👥</span>
+                <span>Clientes</span>
+            </a>
+            <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
+                <span class="icon">📅</span>
+                <span>Agenda</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="avatar">{{ authService.currentUser()?.name?.charAt(0) }}</div>
+                <div class="details">
+                    <span class="name">{{ authService.currentUser()?.name }}</span>
+                    <span class="role">Administrador</span>
+                </div>
+            </div>
+            <button (click)="authService.logout()" class="logout-btn">Sair</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-body">
+        <router-outlet></router-outlet>
+    </main>
+    <app-toast></app-toast>
+</div>

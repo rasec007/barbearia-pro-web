@@ -1,0 +1,129 @@
+<div class="dashboard-content">
+    <div class="welcome-section">
+        <h1>Bem-vindo de volta! 👋</h1>
+        <p>Aqui está o que está acontecendo na sua barbearia hoje.</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card card">
+            <div class="stat-icon clients">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Total de Clientes</span>
+                <span class="stat-value">{{ stats.totalClients }}</span>
+            </div>
+        </div>
+
+        <div class="stat-card card">
+            <div class="stat-icon appointments">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                    <line x1="16" x2="16" y1="2" y2="6" />
+                    <line x1="8" x2="8" y1="2" y2="6" />
+                    <line x1="3" x2="21" y1="10" y2="10" />
+                    <path d="m9 16 2 2 4-4" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Agendamentos Hoje</span>
+                <span class="stat-value">{{ stats.todayAppointments }}</span>
+            </div>
+        </div>
+
+        <div class="stat-card card">
+            <div class="stat-icon pending">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Pendentes</span>
+                <span class="stat-value">{{ stats.pendingConfirmations }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <div class="appointments-list card">
+            <div class="card-header">
+                <h3>Próximos Clientes (Hoje)</h3>
+                <button class="btn-text" (click)="navigateTo('/calendar')">Ver Agenda</button>
+            </div>
+            <div class="table-container">
+                <table *ngIf="todayAppointments.length > 0; else noApps">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let app of todayAppointments">
+                            <td class="time-cell">{{ app.dateTime | date:'HH:mm' }}</td>
+                            <td class="client-cell">
+                                <div class="avatar-sm">{{ app.client?.name?.charAt(0) }}</div>
+                                {{ app.client?.name }}
+                            </td>
+                            <td>{{ app.subject }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="app.status">{{ app.status }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ng-template #noApps>
+                    <div class="empty-state">
+                        <p>Nenhum agendamento para hoje.</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="quick-actions card">
+                <h3>Ações Rápidas</h3>
+                <div class="actions-grid">
+                    <button class="action-btn" (click)="navigateTo('/clients')">
+                        <div class="action-icon new-client">+</div>
+                        <span>Novo Cliente</span>
+                    </button>
+                    <button class="action-btn" (click)="navigateTo('/calendar')">
+                        <div class="action-icon new-app">📅</div>
+                        <span>Agendar</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="recent-clients card" style="margin-top: 1.5rem;">
+                <h3>Clientes Cadastrados</h3>
+                <div class="mini-client-list">
+                    <div *ngFor="let client of allClients" class="mini-client-item">
+                        <div class="avatar-xs">{{ client.name.charAt(0) }}</div>
+                        <div class="mini-info">
+                            <span class="mini-name">{{ client.name }}</span>
+                            <span class="mini-phone">{{ client.phone }}</span>
+                        </div>
+                    </div>
+                    <button class="btn-text btn-block" (click)="navigateTo('/clients')" *ngIf="allClients.length > 0">
+                        Ver todos os clientes
+                    </button>
+                    <div *ngIf="allClients.length === 0" class="empty-mini">
+                        Nenhum cliente cadastrado.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
